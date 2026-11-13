@@ -1,0 +1,39 @@
+name: Publish direct IPA download
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: privateiptv-release-v0.1.0
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: macos-15
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify source and build IPA
+        run: |
+          printf '%s\n' 'a41956dd2c99b78811aafabd95eb597c432198c5aec40a914e1a2a83535706eb  PrivateIPTV-tvOS16-v0.1.0-source.zip' | shasum -a 256 -c -
+          unzip -q "PrivateIPTV-tvOS16-v0.1.0-source.zip" -d source
+          cd source/PrivateIPTV
+          python3 -u build.py
+      - name: Publish IPA for TrollStore
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_COMMIT: ${{ github.sha }}
+        run: |
+          printf '%s\n' 'Private IPTV 0.1.0 for Apple TV running tvOS 16.0 or later.' 'Install the IPA using TrollStore-tvOS. Includes M3U playlist import, channel groups, favorites, search, subtitles and audio-track selection.' 'Compilation, parser and Foundation tests, static analysis, icon generation, signature verification and IPA validation passed. Playback and remote navigation still need testing on a physical Apple TV.' > release-notes.txt
+          gh release create v0.1.0 source/PrivateIPTV/dist/PrivateIPTV-tvOS16-v0.1.0.ipa source/PrivateIPTV/dist/BUILD-REPORT.json --target "$RELEASE_COMMIT" --title "Private IPTV 0.1.0 for Apple TV" --notes-file release-notes.txt
