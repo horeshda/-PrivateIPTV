@@ -25,7 +25,7 @@ jobs:
           python-version: '3.12'
       - name: Verify source and build IPA
         run: |
-          printf '%s\n' '97bf88e3a36d4b194c133f09d229707df2015dba97fe19157cbf9156fecdb49f  PrivateIPTV-tvOS16-v0.1.5-source.zip' | shasum -a 256 -c -
+          printf '%s\n' 'c3a2c90076e1875db44a84599e7af713ad6d982d5b730f56a29bf91ac3a9026d  PrivateIPTV-tvOS16-v0.1.5-source.zip' | shasum -a 256 -c -
           unzip -q "PrivateIPTV-tvOS16-v0.1.5-source.zip" -d source
           cd source/PrivateIPTV
           python3 -u build.py
