@@ -19,7 +19,7 @@ jobs:
           python-version: '3.12'
       - name: Build IPA
         run: |
-          unzip -q "PrivateIPTV-tvOS16-v0.1.0-source.zip" -d source
+          unzip -q "PrivateIPTV-tvOS16-v0.1.1-source.zip" -d source
           cd source/PrivateIPTV
           python3 -u build.py
       - uses: actions/upload-artifact@v4
@@ -28,3 +28,4 @@ jobs:
           path: source/PrivateIPTV/dist/
           if-no-files-found: error
           retention-days: 14
+
