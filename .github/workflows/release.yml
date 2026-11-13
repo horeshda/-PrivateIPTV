@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: privateiptv-release-v0.1.1
+  group: privateiptv-release-v0.1.2
   cancel-in-progress: false
 
 jobs:
@@ -25,8 +25,8 @@ jobs:
           python-version: '3.12'
       - name: Verify source and build IPA
         run: |
-          printf '%s\n' 'c1ef090eb8cb927a96fb62818ae5b240be685ef33e93fc63532a3726504b179d  PrivateIPTV-tvOS16-v0.1.1-source.zip' | shasum -a 256 -c -
-          unzip -q "PrivateIPTV-tvOS16-v0.1.1-source.zip" -d source
+          printf '%s\n' 'be3691b64be647d14a37b02c9dbe358e60966481b2061902e74d8d48dfb93b2c  PrivateIPTV-tvOS16-v0.1.2-source.zip' | shasum -a 256 -c -
+          unzip -q "PrivateIPTV-tvOS16-v0.1.2-source.zip" -d source
           cd source/PrivateIPTV
           python3 -u build.py
       - name: Publish IPA for TrollStore
@@ -35,6 +35,6 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_COMMIT: ${{ github.sha }}
         run: |
-          printf '%s\n' 'Private IPTV 0.1.1 for Apple TV running tvOS 16.0 or later.' 'Install the IPA using TrollStore-tvOS. New orange IPTV icon, English interface, wider menu buttons and a clean empty library screen. Update the existing app to retain saved playlists and favorites.' 'Compilation, parser and Foundation tests, static analysis, icon generation, signature verification and IPA validation passed. Playback and remote navigation still need testing on a physical Apple TV.' > release-notes.txt
-          gh release create v0.1.1 source/PrivateIPTV/dist/PrivateIPTV-tvOS16-v0.1.1.ipa source/PrivateIPTV/dist/BUILD-REPORT.json --target "$RELEASE_COMMIT" --title "Private IPTV 0.1.1 for Apple TV" --notes-file release-notes.txt
+          printf '%s\n' 'Private IPTV 0.1.2 for Apple TV running tvOS 16.0 or later.' 'Install the IPA using TrollStore-tvOS. Fixed remote focus navigation to Add playlist, a full-width toolbar, saved Light/Dark/System themes, and a new turquoise-green television-wave icon. English interface and a clean empty library screen. Update the existing app to retain saved playlists and favorites.' 'Compilation, parser and Foundation tests, static analysis, icon generation, signature verification and IPA validation passed. Playback, remote navigation and appearance switching still need testing on a physical Apple TV.' > release-notes.txt
+          gh release create v0.1.2 source/PrivateIPTV/dist/PrivateIPTV-tvOS16-v0.1.2.ipa source/PrivateIPTV/dist/BUILD-REPORT.json --target "$RELEASE_COMMIT" --title "Private IPTV 0.1.2 for Apple TV" --notes-file release-notes.txt
 
