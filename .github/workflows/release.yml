@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: privateiptv-release-v0.1.4
+  group: privateiptv-release-v0.1.5
   cancel-in-progress: false
 
 jobs:
@@ -25,8 +25,8 @@ jobs:
           python-version: '3.12'
       - name: Verify source and build IPA
         run: |
-          printf '%s\n' 'd39e0590d167f8ecb3d34260d8eecb3e8a06935fe6418665c527e9dfae2a1bc7  PrivateIPTV-tvOS16-v0.1.4-source.zip' | shasum -a 256 -c -
-          unzip -q "PrivateIPTV-tvOS16-v0.1.4-source.zip" -d source
+          printf '%s\n' '7e1d79eccfbbf0635dda6a37c6cfe195dc24f68e3ba773740ffb8cb62bf4a5e2  PrivateIPTV-tvOS16-v0.1.5-source.zip' | shasum -a 256 -c -
+          unzip -q "PrivateIPTV-tvOS16-v0.1.5-source.zip" -d source
           cd source/PrivateIPTV
           python3 -u build.py
       - name: Publish IPA for TrollStore
@@ -35,6 +35,6 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_COMMIT: ${{ github.sha }}
         run: |
-          printf '%s\n' 'Private IPTV 0.1.4 for Apple TV running tvOS 16.0 or later.' 'Fixes playback return handling: restores focus to the last played channel, stops decoder cleanup in the background, detaches the old video surface and cancels timers and callbacks when closing. Audio session changes no longer wait on the UI thread. Adds CC > Text size with four saved sizes and a smaller default. Text subtitle resizing is applied while playing when supported; image or burned-in captions may not resize. Retains 500,000-entry / 256 MB playlist capacity, themes and the television-wave icon. Install over the existing app using TrollStore-tvOS to keep playlists and favorites.' 'Compilation, static analysis, parser and Foundation tests, blocking decoder cleanup regression, signing and IPA validation passed. The attached build report records tvOS Simulator regression availability/results. Physical Apple TV playback and Siri Remote navigation still require device verification.' > release-notes.txt
-          gh release create v0.1.4 source/PrivateIPTV/dist/PrivateIPTV-tvOS16-v0.1.4.ipa source/PrivateIPTV/dist/BUILD-REPORT.json --target "$RELEASE_COMMIT" --title "Private IPTV 0.1.4 for Apple TV" --notes-file release-notes.txt
+          printf '%s\n' 'Private IPTV 0.1.5 for Apple TV running tvOS 16.0 or later.' 'Reworks player controls and lifecycle after reports that 0.1.4 still froze. All native decoder operations now run on a dedicated serial queue. The UI uses snapshots and never waits for decoder shutdown. Removes unconditional channel-grid layout invalidation. Replaces nested subtitle dialogs with one focusable menu, adds a focus target while controls are hidden, and preserves playlists, favorites, themes and icon. Install over the existing app with TrollStore-tvOS.' 'Required build checks: real TVVLCKit playback in tvOS Simulator, six playback-return cycles, all four subtitle sizes through the CC menu, audio menu, pause/resume, next channel, favorites and focus restoration. Also parser and Foundation cache tests, native compilation, static analysis, signing and IPA validation. These checks do not replace testing on the physical Apple TV or with a Siri Remote. See BUILD-REPORT.json.' > release-notes.txt
+          gh release create v0.1.5 source/PrivateIPTV/dist/PrivateIPTV-tvOS16-v0.1.5.ipa source/PrivateIPTV/dist/BUILD-REPORT.json --target "$RELEASE_COMMIT" --title "Private IPTV 0.1.5 for Apple TV" --notes-file release-notes.txt
 

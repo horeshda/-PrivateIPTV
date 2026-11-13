@@ -19,7 +19,7 @@ jobs:
           python-version: '3.12'
       - name: Build IPA
         run: |
-          unzip -q "PrivateIPTV-tvOS16-v0.1.4-source.zip" -d source
+          unzip -q "PrivateIPTV-tvOS16-v0.1.5-source.zip" -d source
           cd source/PrivateIPTV
           python3 -u build.py
       - uses: actions/upload-artifact@v4
