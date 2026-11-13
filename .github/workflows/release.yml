@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: privateiptv-release-v0.1.3
+  group: privateiptv-release-v0.1.4
   cancel-in-progress: false
 
 jobs:
@@ -25,8 +25,8 @@ jobs:
           python-version: '3.12'
       - name: Verify source and build IPA
         run: |
-          printf '%s\n' '491dcc37ef7229dd0d05ed2f98f506e8bf5b85343663919b8c93f1666257feb1  PrivateIPTV-tvOS16-v0.1.3-source.zip' | shasum -a 256 -c -
-          unzip -q "PrivateIPTV-tvOS16-v0.1.3-source.zip" -d source
+          printf '%s\n' '2f449a649dbc607b278ee5880d43ff84e32fc92737735eccc65acbe5f8fb5a98  PrivateIPTV-tvOS16-v0.1.4-source.zip' | shasum -a 256 -c -
+          unzip -q "PrivateIPTV-tvOS16-v0.1.4-source.zip" -d source
           cd source/PrivateIPTV
           python3 -u build.py
       - name: Publish IPA for TrollStore
@@ -35,6 +35,6 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_COMMIT: ${{ github.sha }}
         run: |
-          printf '%s\n' 'Private IPTV 0.1.3 for Apple TV running tvOS 16.0 or later.' 'Raises playlist capacity to 500,000 entries and 256 MB per list. Imports now parse line by line; cache reading, writing and channel filtering run in the background. A failed import keeps the previous playlist. Existing themes, remote navigation and icon are preserved. Update the existing app using TrollStore-tvOS to retain playlists and favorites.' 'Validated with 500,000 entries, a 256 MB file, over-limit rejection and Foundation cache round-trip, plus native tvOS compilation, static analysis, icon generation, signature and IPA checks. Large provider playlists and playback still require testing on a physical Apple TV.' > release-notes.txt
-          gh release create v0.1.3 source/PrivateIPTV/dist/PrivateIPTV-tvOS16-v0.1.3.ipa source/PrivateIPTV/dist/BUILD-REPORT.json --target "$RELEASE_COMMIT" --title "Private IPTV 0.1.3 for Apple TV" --notes-file release-notes.txt
+          printf '%s\n' 'Private IPTV 0.1.4 for Apple TV running tvOS 16.0 or later.' 'Fixes playback return handling: restores focus to the last played channel, stops decoder cleanup in the background, detaches the old video surface and cancels timers and callbacks when closing. Audio session changes no longer wait on the UI thread. Retains 500,000-entry / 256 MB playlist capacity, themes and the television-wave icon. Install over the existing app using TrollStore-tvOS to keep playlists and favorites.' 'Compilation, static analysis, parser and Foundation tests, blocking decoder cleanup regression, signing and IPA validation passed. The attached build report records tvOS Simulator regression availability/results. Physical Apple TV playback and Siri Remote navigation still require device verification.' > release-notes.txt
+          gh release create v0.1.4 source/PrivateIPTV/dist/PrivateIPTV-tvOS16-v0.1.4.ipa source/PrivateIPTV/dist/BUILD-REPORT.json --target "$RELEASE_COMMIT" --title "Private IPTV 0.1.4 for Apple TV" --notes-file release-notes.txt
 
